@@ -87,7 +87,7 @@ class _HomeViewState extends State<HomeView> {
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text("Hi,Mohmammed", style: getTitleStyle(context)),
+              Text("Hi,Mohmammed ali", style: getTitleStyle(context)),
               Text("What are you reading today", style: getSmallStyle()),
             ],
           ),
