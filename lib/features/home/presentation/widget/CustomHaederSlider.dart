@@ -17,6 +17,16 @@ class CustomHaederSlider extends StatelessWidget {
             color: AppColors.green,
             borderRadius: ResponsiveLayout.getBorderRadius(20, context),
           ),
+          child: Center(
+            child: Text(
+              'Item $index',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         );
       },
       options: CarouselOptions(

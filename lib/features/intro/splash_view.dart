@@ -4,7 +4,6 @@ import 'package:mybook/core/functions/navigator.dart';
 import 'package:mybook/core/services/local_storage.dart';
 import 'package:mybook/core/widgets/nav_bar_widget.dart';
 import 'package:mybook/features/auth/presentation/view/login_view.dart';
-import 'package:mybook/features/home/presentation/view/home_view.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});

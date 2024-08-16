@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mybook/core/responsive/responsive_layout.dart';
 import 'package:mybook/core/utils/colors.dart';
 import 'package:mybook/core/utils/text_style.dart';
