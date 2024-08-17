@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mybook/core/functions/navigator.dart';
 import 'package:mybook/core/services/local_storage.dart';
 import 'package:mybook/core/widgets/nav_bar_widget.dart';
+import 'package:mybook/features/auth/presentation/manager/auth_cubit.dart';
 import 'package:mybook/features/auth/presentation/view/login_view.dart';
 
 class SplashView extends StatefulWidget {

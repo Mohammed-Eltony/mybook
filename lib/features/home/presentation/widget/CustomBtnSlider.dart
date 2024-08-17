@@ -19,6 +19,13 @@ class CustomBtnSlider extends StatefulWidget {
 class _CustomBtnSliderState extends State<CustomBtnSlider> {
   int pageindex = 0;
 
+  List imagePuth = [
+    'assets/s1.jpg',
+    'assets/s2.jpg',
+    'assets/s3.jpg',
+    'assets/s4.jpg',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -26,18 +33,18 @@ class _CustomBtnSliderState extends State<CustomBtnSlider> {
         CarouselSlider.builder(
           itemBuilder: (context, index, realIndex) {
             return Container(
+              clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
-                color: AppColors.green,
-                borderRadius: ResponsiveLayout.getBorderRadius(20, context),
+                borderRadius: BorderRadius.circular(
+                  ResponsiveLayout.getHeight(20, context),
+                ),
               ),
-              child: Center(
-                child: Text(
-                  'Item $index',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
+              height: ResponsiveLayout.getHeight(130, context),
+              width: double.infinity,
+              child: ClipRRect(
+                child: Image.asset(
+                  imagePuth[index],
+                  fit: BoxFit.fill,
                 ),
               ),
             );
@@ -62,18 +69,18 @@ class _CustomBtnSliderState extends State<CustomBtnSlider> {
             },
             scrollDirection: Axis.horizontal,
           ),
-          itemCount: 5,
+          itemCount: imagePuth.length,
         ),
         Gap(ResponsiveLayout.getHeight(10, context)),
         SmoothPageIndicator(
           controller: PageController(initialPage: pageindex),
-          count: 5,
+          count: imagePuth.length,
           axisDirection: Axis.horizontal,
-          effect: const SlideEffect(
+          effect: SlideEffect(
               spacing: 10,
               radius: 50,
-              dotWidth: 20,
-              dotHeight: 20,
+              dotWidth: ResponsiveLayout.getWidth(15, context),
+              dotHeight: ResponsiveLayout.getHeight(15, context),
               paintStyle: PaintingStyle.stroke,
               strokeWidth: 2,
               dotColor: AppColors.green,

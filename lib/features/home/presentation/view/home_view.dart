@@ -1,54 +1,20 @@
-// import 'package:flutter/material.dart';
-// import 'package:mybook/core/utils/text_style.dart';
-
-// class HomeView extends StatefulWidget {
-//   const HomeView({super.key});
-
-//   @override
-//   _HomeViewState createState() => _HomeViewState();
-// }
-
-// class _HomeViewState extends State<HomeView> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       drawer: const Drawer(),
-//       appBar: AppBar(
-//         title: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: <Widget>[
-//             Text("Hi,Mohmammed", style: getTitleStyle(context)),
-//             Text("What are you reading today", style: getSmallStyle()),
-//           ],
-//         ),
-//         actions: const [
-//           CircleAvatar(
-//             radius: 35,
-//             backgroundImage: AssetImage('assets/user avatar.png'),
-//           )
-//         ],
-//       ),
-//       body:Column(
-//         children: <Widget>[
-
-//         ],
-//       )
-//     );
-//   }
-// }
-
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:mybook/core/responsive/responsive_layout.dart';
 import 'package:mybook/core/utils/colors.dart';
 import 'package:mybook/core/utils/text_style.dart';
+import 'package:mybook/features/auth/presentation/manager/auth_cubit.dart';
+import 'package:mybook/features/auth/presentation/manager/auth_state.dart';
+import 'package:mybook/features/home/presentation/manager/category_model/category_model.dart';
+import 'package:mybook/features/home/presentation/manager/product/product_model.dart';
 import 'package:mybook/features/home/presentation/widget/CustomBestSelling.dart';
 import 'package:mybook/features/home/presentation/widget/CustomBtnSlider.dart';
 import 'package:mybook/features/home/presentation/widget/CustomCategorys.dart';
 import 'package:mybook/features/home/presentation/widget/CustomDrawer.dart';
 import 'package:mybook/features/home/presentation/widget/CustomHaederSlider.dart';
+import 'package:mybook/features/profile/presentation/manager/user_model.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -61,83 +27,108 @@ class _HomeViewState extends State<HomeView> {
   final _advancedDrawerController = AdvancedDrawerController();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    BlocProvider.of<AuthCubit>(context).getHomeHeadersSlider();
+    BlocProvider.of<AuthCubit>(context).getBestSellery();
+    BlocProvider.of<AuthCubit>(context).getCategories();
+    BlocProvider.of<AuthCubit>(context).getProfile();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return AdvancedDrawer(
-      backdrop: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [AppColors.primary, AppColors.green],
-          ),
-        ),
-      ),
-      controller: _advancedDrawerController,
-      animationCurve: Curves.easeInOut,
-      animationDuration: const Duration(milliseconds: 300),
-      animateChildDecoration: true,
-      rtlOpening: false,
-      // openScale: 1.0,
-      disabledGestures: false,
-      childDecoration: BoxDecoration(
-        borderRadius: ResponsiveLayout.getBorderRadius(20, context),
-      ),
-      drawer: const CustomDrawer(),
-      child: Scaffold(
-        floatingActionButton: SizedBox(
-          width: 45,
-          height: 45,
-          child: FloatingActionButton(
-            onPressed: () {},
-            backgroundColor: AppColors.primary,
-            child: const Icon(
-              Icons.shopping_cart_outlined,
-              color: AppColors.white,
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, state) {
+        List sliders = AuthCubit.get(context).sliders;
+        List<ProductModel> productsModel = AuthCubit.get(context).products;
+        List<CategoryModel> categoryModel = AuthCubit.get(context).categories;
+        UserModel? user = AuthCubit.get(context).userModel;
+        return AdvancedDrawer(
+          backdrop: Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [AppColors.primary, AppColors.green],
+              ),
             ),
           ),
-        ),
-        appBar: AppBar(
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text("Hi,Mohmammed ali", style: getTitleStyle(context)),
-              Text("What are you reading today", style: getSmallStyle()),
-            ],
+          controller: _advancedDrawerController,
+          animationCurve: Curves.easeInOut,
+          animationDuration: const Duration(milliseconds: 300),
+          animateChildDecoration: true,
+          rtlOpening: false,
+          // openScale: 1.0,
+          disabledGestures: false,
+          childDecoration: BoxDecoration(
+            borderRadius: ResponsiveLayout.getBorderRadius(20, context),
           ),
-          actions: const [
-            CircleAvatar(
-              radius: 35,
-              backgroundColor: AppColors.primary,
-              backgroundImage: AssetImage('assets/user avatar.png'),
-            )
-          ],
-          leading: customLedingDrawer(),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Gap(
-                ResponsiveLayout.getGap(10, context),
+          drawer: const CustomDrawer(),
+          child: Scaffold(
+            floatingActionButton: SizedBox(
+              width: 45,
+              height: 45,
+              child: FloatingActionButton(
+                onPressed: () {},
+                backgroundColor: AppColors.primary,
+                child: const Icon(
+                  Icons.shopping_cart_outlined,
+                  color: AppColors.white,
+                ),
               ),
-              const CustomHaederSlider(),
-              Gap(
-                ResponsiveLayout.getGap(10, context),
+            ),
+            appBar: AppBar(
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(user?.name ?? "", style: getTitleStyle(context)),
+                  Text("What are you reading today", style: getSmallStyle()),
+                ],
               ),
-              const CustomBestSelling(),
-              const CustomBtnSlider(),
-              Gap(
-                ResponsiveLayout.getGap(10, context),
+              actions: [
+                CircleAvatar(
+                  radius: 35,
+                  backgroundColor: AppColors.primary,
+                  backgroundImage: NetworkImage(user?.image ?? ""),
+                )
+              ],
+              leading: customLedingDrawer(),
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Gap(
+                    ResponsiveLayout.getGap(10, context),
+                  ),
+                  CustomHaederSlider(
+                    imageSlider: sliders,
+                  ),
+                  Gap(
+                    ResponsiveLayout.getGap(10, context),
+                  ),
+                  CustomBestSellrey(
+                    products: productsModel,
+                  ),
+                  const CustomBtnSlider(),
+                  Gap(
+                    ResponsiveLayout.getGap(10, context),
+                  ),
+                  CustomCategorys(
+                    categorys: categoryModel,
+                  ),
+                  Gap(
+                    ResponsiveLayout.getGap(10, context),
+                  ),
+                ],
               ),
-              const CustomCategorys(),
-              Gap(
-                ResponsiveLayout.getGap(10, context),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 //

@@ -4,6 +4,7 @@ import 'package:mybook/core/responsive/responsive_layout.dart';
 import 'package:mybook/core/utils/colors.dart';
 
 import 'package:mybook/features/home/presentation/view/home_view.dart';
+import 'package:mybook/features/profile/presentation/view/profile_view.dart';
 
 class NavBarWidget extends StatefulWidget {
   const NavBarWidget({super.key});
@@ -19,7 +20,7 @@ class _NavBarWidgetState extends State<NavBarWidget> {
     const HomeView(),
     const Center(child: Text('Search')),
     const Center(child: Text('favorite')),
-    const Center(child: Text('profile')),
+    const ProfileView(),
   ];
   @override
   Widget build(BuildContext context) {

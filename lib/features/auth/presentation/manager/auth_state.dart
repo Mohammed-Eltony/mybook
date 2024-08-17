@@ -45,3 +45,47 @@ class ResetPasswordError extends AuthState {
 
   ResetPasswordError(this.error);
 }
+
+// headers state
+class HeadersLoading extends AuthState {}
+
+class HeadersSuccess extends AuthState {}
+
+class HeadersError extends AuthState {
+  String error;
+
+  HeadersError(this.error);
+}
+
+// bast seller state
+class BastSellerLoading extends AuthState {}
+
+class BastSellerSuccess extends AuthState {}
+
+class BastSellerError extends AuthState {
+  String error;
+
+  BastSellerError(this.error);
+}
+
+// category state
+class CategoryLoading extends AuthState {}
+
+class CategorySuccess extends AuthState {}
+
+class CategoryError extends AuthState {
+  String error;
+
+  CategoryError(this.error);
+}
+
+// profile state
+class ProfileLoading extends AuthState {}
+
+class ProfileSuccess extends AuthState {}
+
+class ProfileError extends AuthState {
+  String error;
+
+  ProfileError(this.error);
+}
