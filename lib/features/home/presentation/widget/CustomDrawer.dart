@@ -107,7 +107,7 @@ class CustomDrawer extends StatelessWidget {
                 ),
                 child: ListTile(
                   onTap: () {
-                    AppLocalStorage.cacheData('token', '');
+                    AppLocalStorage.removeData('token');
                     navToRemoveUntil(context, const LoginView());
                   },
                   leading: const Icon(Icons.logout),

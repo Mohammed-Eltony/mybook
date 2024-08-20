@@ -15,6 +15,7 @@ import 'package:mybook/features/home/presentation/widget/CustomCategorys.dart';
 import 'package:mybook/features/home/presentation/widget/CustomDrawer.dart';
 import 'package:mybook/features/home/presentation/widget/CustomHaederSlider.dart';
 import 'package:mybook/features/profile/presentation/manager/user_model.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -70,8 +71,8 @@ class _HomeViewState extends State<HomeView> {
           drawer: const CustomDrawer(),
           child: Scaffold(
             floatingActionButton: SizedBox(
-              width: 45,
-              height: 45,
+              width: ResponsiveLayout.getWidth(45, context),
+              height: ResponsiveLayout.getHeight(45, context),
               child: FloatingActionButton(
                 onPressed: () {},
                 backgroundColor: AppColors.primary,
@@ -85,15 +86,61 @@ class _HomeViewState extends State<HomeView> {
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(user?.name ?? "", style: getTitleStyle(context)),
+                  user?.name != null
+                      ? Text('${user?.name}', style: getTitleStyle(context))
+                      : SizedBox(
+                          height: ResponsiveLayout.getHeight(20, context),
+                          child: Shimmer.fromColors(
+                            baseColor: AppColors.grey,
+                            highlightColor: AppColors.white,
+                            child: Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(
+                                      ResponsiveLayout.getHeight(20, context)),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                   Text("What are you reading today", style: getSmallStyle()),
                 ],
               ),
               actions: [
-                CircleAvatar(
-                  radius: 35,
-                  backgroundColor: AppColors.primary,
-                  backgroundImage: NetworkImage(user?.image ?? ""),
+                Container(
+                  margin: EdgeInsets.only(
+                      right: ResponsiveLayout.getWidth(5, context)),
+                  clipBehavior: Clip.antiAlias,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  width: ResponsiveLayout.getWidth(60, context),
+                  height: ResponsiveLayout.getHeight(60, context),
+                  child: Image.network(
+                    user?.image ?? '',
+                    errorBuilder: (context, error, stackTrace) {
+                      return SizedBox(
+                        width: 50,
+                        height: ResponsiveLayout.getHeight(150, context),
+                        child: Shimmer.fromColors(
+                          baseColor: AppColors.grey,
+                          highlightColor: AppColors.white,
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(
+                                    ResponsiveLayout.getHeight(20, context)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 )
               ],
               leading: customLedingDrawer(),

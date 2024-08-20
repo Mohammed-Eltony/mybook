@@ -19,7 +19,7 @@ class CustomHaederSlider extends StatelessWidget {
         if (imageSlider.isNotEmpty) {
           return ClipRRect(
             borderRadius: BorderRadius.all(
-              Radius.circular(ResponsiveLayout.getHeight(20, context)),
+              ResponsiveLayout.getRadius(20, context),
             ),
             child: Image.network(
               imageSlider[index]['image'],
@@ -28,11 +28,12 @@ class CustomHaederSlider extends StatelessWidget {
                   baseColor: AppColors.grey,
                   highlightColor: AppColors.white,
                   child: Container(
-                    height: 200,
-                    width: 150,
+                    height: ResponsiveLayout.getHeight(200, context),
+                    width: double.infinity,
                     decoration: BoxDecoration(
                       color: Colors.black,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius:
+                          ResponsiveLayout.getBorderRadius(10, context),
                     ),
                   ),
                 );

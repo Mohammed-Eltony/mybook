@@ -43,6 +43,7 @@ dependencies:
   google_fonts: ^6.2.1
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  image_picker: ^1.1.2
   lottie: ^3.1.2
   pretty_dio_logger: ^1.4.0
   shimmer: ^3.0.0

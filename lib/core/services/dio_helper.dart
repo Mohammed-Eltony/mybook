@@ -37,7 +37,7 @@ class DioHelper {
     required String url,
     String? token,
     Map<String, dynamic>? query,
-    required Map<String, dynamic> data,
+    required dynamic data,
   }) async {
     dio!.options.headers = {
       'Accept': 'application/json',

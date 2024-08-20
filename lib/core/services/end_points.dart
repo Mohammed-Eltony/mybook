@@ -8,4 +8,5 @@ class EndPoints {
   static const String productsBestseller = 'products-bestseller';
   static const String categories = 'categories';
   static const String profile = 'profile';
+  static const String update_profile = 'update-profile';
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:mybook/core/utils/colors.dart';
 
 class CustomTextField extends StatelessWidget {
   CustomTextField(
@@ -9,6 +9,7 @@ class CustomTextField extends StatelessWidget {
       this.validator,
       this.obscureText = false,
       this.keyboardType,
+      this.label,
       this.suffix});
 
   String? hintText;
@@ -18,6 +19,7 @@ class CustomTextField extends StatelessWidget {
   Function(String?)? validator;
   bool obscureText;
   Widget? suffix;
+  String? label;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,12 @@ class CustomTextField extends StatelessWidget {
       controller: controller,
       validator: (value) => validator != null ? validator!(value) : null,
       decoration: InputDecoration(
+        label: label == null
+            ? null
+            : Text(
+                label!,
+                style: const TextStyle(color: AppColors.primary),
+              ),
         suffixIcon: suffix,
         hintText: hintText ?? "",
       ),

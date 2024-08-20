@@ -89,3 +89,14 @@ class ProfileError extends AuthState {
 
   ProfileError(this.error);
 }
+
+//edit profile state
+class EditProfileLoading extends AuthState {}
+
+class EditProfileSuccess extends AuthState {}
+
+class EditProfileError extends AuthState {
+  String error;
+
+  EditProfileError(this.error);
+}

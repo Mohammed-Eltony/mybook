@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mybook/core/services/dio_helper.dart';
@@ -14,7 +17,6 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
 
   static AuthCubit get(context) => BlocProvider.of(context);
-  var token = AppLocalStorage.getCacheData('token') ?? "";
 
 // login
   TextEditingController emailControlLogin = TextEditingController();
@@ -26,6 +28,7 @@ class AuthCubit extends Cubit<AuthState> {
       'password': passwordControlLogin.text,
     }).then((value) {
       AppLocalStorage.cacheData('token', value.data['data']['token']);
+      log("Login cached token:${AppLocalStorage.getCacheData('token')}");
 
       emit(LoginSuccess());
     }).catchError((error) {
@@ -177,17 +180,22 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   // get profile
+
   UserModel? userModel;
   getProfile() {
     emit(ProfileLoading());
+    String? token = AppLocalStorage.getCacheData('token');
     DioHelper.getData(
       url: EndPoints.profile,
       token: token,
     ).then((value) {
+      log('profile Success Token : $token');
       UserModel user = UserModel.fromJson(value.data['data']);
       userModel = user;
+      // log(userModel!.toJson().toString());
       emit(ProfileSuccess());
     }).catchError((error) {
+      log('profile Error Token : $token');
       log(error.response.data.toString());
       if (error.response != null && error.response.statusCode == 422) {
         emit(ProfileError(error.response.data['message'].toString()));
@@ -195,5 +203,98 @@ class AuthCubit extends Cubit<AuthState> {
         emit(ProfileError(error.response.toString()));
       }
     });
+  }
+
+  // edit profile
+
+  TextEditingController nameEditControl = TextEditingController();
+  TextEditingController phoneEditControl = TextEditingController();
+  TextEditingController cityEditControl = TextEditingController();
+  TextEditingController addressEditControl = TextEditingController();
+  File? puthImgegEdit;
+
+  addEdit() {
+    log('edit');
+    var nameEdit =
+        nameEditControl.text.isEmpty ? userModel?.name : nameEditControl.text;
+    var phoneEdit = phoneEditControl.text.isNotEmpty
+        ? phoneEditControl.text
+        : userModel?.phone ?? '';
+    var cityEdit = cityEditControl.text.isNotEmpty
+        ? cityEditControl.text
+        : userModel?.city ?? '';
+    var addressEdit = addressEditControl.text.isNotEmpty
+        ? addressEditControl.text
+        : userModel?.address ?? '';
+
+    log('name: $nameEdit');
+    log('phone: $phoneEdit');
+    log('city: $cityEdit');
+    log('address: $addressEdit');
+    nameEditControl = TextEditingController(text: nameEdit);
+    phoneEditControl = TextEditingController(text: phoneEdit);
+    cityEditControl = TextEditingController(text: cityEdit);
+    addressEditControl = TextEditingController(text: addressEdit);
+
+    return [nameEdit, addressEdit, cityEdit, phoneEdit];
+  }
+
+  Future<void> editProfile() async {
+    emit(EditProfileLoading());
+
+    // التأكد من تعبئة الحقول بالقيم الحالية من userModel
+
+    String? token = AppLocalStorage.getCacheData('token');
+
+    try {
+      // إعداد FormData لتجميع البيانات والصورة
+      FormData formData = FormData.fromMap({
+        'name': '${addEdit()[0]}',
+        if (puthImgegEdit != null)
+          'image': await MultipartFile.fromFile(
+            puthImgegEdit!.path,
+            filename: puthImgegEdit!.path.split('/').last,
+          ),
+        'address': addEdit()[1],
+        'city': addEdit()[2],
+        'phone': addEdit()[3],
+      });
+
+      // تسجيل FormData قبل إرسالها
+      log('FormData: ${formData.fields.toString()}');
+
+      // إرسال البيانات باستخدام Dio
+      await DioHelper.postData(
+        url: EndPoints.update_profile,
+        token: token,
+        data: formData,
+      ).then((value) {
+        getProfile();
+        log('Edit Response: ${value.data.toString()}');
+        emit(EditProfileSuccess());
+      }).catchError((error) {
+        log('Error: ${error.toString()}');
+      }).catchError((error) {
+        if (error is DioException) {
+          if (error.response != null) {
+            log('Response status code: ${error.response?.statusCode}');
+            log('Response data: ${error.response?.data}');
+          } else {
+            log('Error: ${error.message}');
+          }
+        } else {
+          log('Unexpected error: ${error.toString()}');
+        }
+      });
+    } catch (error) {
+      log('Error: ${error.toString()}');
+      if (error is DioException &&
+          error.response != null &&
+          error.response!.statusCode == 422) {
+        emit(EditProfileError(error.response!.data['message'].toString()));
+      } else {
+        emit(EditProfileError(error.toString()));
+      }
+    }
   }
 }

@@ -14,4 +14,8 @@ class AppLocalStorage {
   static getCacheData(key) {
     return box.get(key);
   }
+
+  static removeData(key) {
+    box.delete(key);
+  }
 }
