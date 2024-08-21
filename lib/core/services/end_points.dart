@@ -9,4 +9,6 @@ class EndPoints {
   static const String categories = 'categories';
   static const String profile = 'profile';
   static const String update_profile = 'update-profile';
+  static const String search = 'products-search?name=';
+  static const String showCategory = '/categories/';
 }

@@ -10,6 +10,7 @@ class CustomTextField extends StatelessWidget {
       this.obscureText = false,
       this.keyboardType,
       this.label,
+      this.prefix,
       this.suffix});
 
   String? hintText;
@@ -19,6 +20,7 @@ class CustomTextField extends StatelessWidget {
   Function(String?)? validator;
   bool obscureText;
   Widget? suffix;
+  Widget? prefix;
   String? label;
 
   @override
@@ -36,6 +38,7 @@ class CustomTextField extends StatelessWidget {
                 style: const TextStyle(color: AppColors.primary),
               ),
         suffixIcon: suffix,
+        prefix: prefix,
         hintText: hintText ?? "",
       ),
     );

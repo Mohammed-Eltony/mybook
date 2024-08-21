@@ -100,3 +100,25 @@ class EditProfileError extends AuthState {
 
   EditProfileError(this.error);
 }
+
+// search state
+class SearchLoading extends AuthState {}
+
+class SearchSuccess extends AuthState {}
+
+class SearchError extends AuthState {
+  String error;
+
+  SearchError(this.error);
+}
+
+// get Show Category state
+class ShowCategoryLoading extends AuthState {}
+
+class ShowCategorySuccess extends AuthState {}
+
+class ShowCategoryError extends AuthState {
+  String error;
+
+  ShowCategoryError(this.error);
+}

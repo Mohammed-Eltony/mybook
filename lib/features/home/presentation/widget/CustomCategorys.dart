@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:mybook/core/functions/navigator.dart';
 import 'package:mybook/core/responsive/responsive_layout.dart';
 import 'package:mybook/core/utils/colors.dart';
 import 'package:mybook/core/utils/text_style.dart';
+import 'package:mybook/core/widgets/show_category.dart';
+import 'package:mybook/features/auth/presentation/manager/auth_cubit.dart';
 import 'package:mybook/features/home/presentation/manager/category_model/category_model.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -37,32 +40,41 @@ class CustomCategorys extends StatelessWidget {
             child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return SizedBox(
-                    height: ResponsiveLayout.getHeight(100, context),
-                    width: ResponsiveLayout.getWidth(120, context),
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset(
-                            'assets/imag_Categorys.jpg',
-                          ),
-                        ),
-                        Container(
-                            height: ResponsiveLayout.getHeight(100, context),
-                            width: ResponsiveLayout.getWidth(120, context),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: AppColors.black.withOpacity(0.5),
+                  return InkWell(
+                    onTap: () async {
+                      navTo(
+                          context,
+                          ShowCategory(
+                            category: categorys[index],
+                          ));
+                    },
+                    child: SizedBox(
+                      height: ResponsiveLayout.getHeight(100, context),
+                      width: ResponsiveLayout.getWidth(120, context),
+                      child: Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.asset(
+                              'assets/imag_Categorys.jpg',
                             ),
-                            child: Center(
-                                child: Text(
-                              categorys[index].name.toString(),
-                              textAlign: TextAlign.center,
-                              style: getBodyStyle(context,
-                                  color: AppColors.white, fontSize: 13),
-                            )))
-                      ],
+                          ),
+                          Container(
+                              height: ResponsiveLayout.getHeight(100, context),
+                              width: ResponsiveLayout.getWidth(120, context),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: AppColors.black.withOpacity(0.5),
+                              ),
+                              child: Center(
+                                  child: Text(
+                                categorys[index].name.toString(),
+                                textAlign: TextAlign.center,
+                                style: getBodyStyle(context,
+                                    color: AppColors.white, fontSize: 13),
+                              )))
+                        ],
+                      ),
                     ),
                   );
                 },

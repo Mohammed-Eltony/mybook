@@ -2,9 +2,11 @@ import 'package:dot_curved_bottom_nav/dot_curved_bottom_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:mybook/core/responsive/responsive_layout.dart';
 import 'package:mybook/core/utils/colors.dart';
+import 'package:mybook/features/favarite/presentation/view/favarite_view.dart';
 
 import 'package:mybook/features/home/presentation/view/home_view.dart';
 import 'package:mybook/features/profile/presentation/view/profile_view.dart';
+import 'package:mybook/features/search/presentation/view/search_view.dart';
 
 class NavBarWidget extends StatefulWidget {
   const NavBarWidget({super.key});
@@ -18,8 +20,8 @@ class _NavBarWidgetState extends State<NavBarWidget> {
 
   List<Widget> screenViews = [
     const HomeView(),
-    const Center(child: Text('Search')),
-    const Center(child: Text('favorite')),
+    const SearchView(),
+    const FavariteView(),
     const ProfileView(),
   ];
   @override

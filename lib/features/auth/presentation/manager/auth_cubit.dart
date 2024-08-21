@@ -179,6 +179,27 @@ class AuthCubit extends Cubit<AuthState> {
     });
   }
 
+  //get Show Category
+
+  List<ProductModel> showCategories = [];
+  getShowCategories({required String id}) {
+    emit(ShowCategoryLoading());
+    DioHelper.getData(url: '${EndPoints.showCategory}$id').then((value) {
+      value.data['data']['products'].forEach((element) {
+        showCategories.add(ProductModel.fromJson(element));
+      });
+      log(showCategories.toString());
+      emit(ShowCategorySuccess());
+    }).catchError((error) {
+      log(error.response.data.toString());
+      if (error.response != null && error.response.statusCode == 422) {
+        emit(ShowCategoryError(error.response.data['message'].toString()));
+      } else {
+        emit(ShowCategoryError(error.response.toString()));
+      }
+    });
+  }
+
   // get profile
 
   UserModel? userModel;
@@ -296,5 +317,27 @@ class AuthCubit extends Cubit<AuthState> {
         emit(EditProfileError(error.toString()));
       }
     }
+  }
+
+  // search prduct
+
+  List<ProductModel> searchProduct = [];
+
+  TextEditingController textSearchControl = TextEditingController();
+
+  searchProducts() {
+    emit(SearchLoading());
+
+    DioHelper.getData(
+      url: "${EndPoints.search}${textSearchControl.text}",
+    ).then((value) {
+      for (var element in value.data['data']['products']) {
+        searchProduct.add(ProductModel.fromJson(element));
+      }
+      log('Search Response: ${value.data.toString()}');
+      emit(SearchSuccess());
+    }).catchError((error) {
+      emit(SearchError(error.toString()));
+    });
   }
 }

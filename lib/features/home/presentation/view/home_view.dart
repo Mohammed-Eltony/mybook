@@ -46,84 +46,28 @@ class _HomeViewState extends State<HomeView> {
         List<ProductModel> productsModel = AuthCubit.get(context).products;
         List<CategoryModel> categoryModel = AuthCubit.get(context).categories;
         UserModel? user = AuthCubit.get(context).userModel;
-        return AdvancedDrawer(
-          backdrop: Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [AppColors.primary, AppColors.green],
-              ),
-            ),
-          ),
-          controller: _advancedDrawerController,
-          animationCurve: Curves.easeInOut,
-          animationDuration: const Duration(milliseconds: 300),
-          animateChildDecoration: true,
-          rtlOpening: false,
-          // openScale: 1.0,
-          disabledGestures: false,
-          childDecoration: BoxDecoration(
-            borderRadius: ResponsiveLayout.getBorderRadius(20, context),
-          ),
+        return Scaffold(
           drawer: const CustomDrawer(),
-          child: Scaffold(
-            floatingActionButton: SizedBox(
-              width: ResponsiveLayout.getWidth(45, context),
-              height: ResponsiveLayout.getHeight(45, context),
-              child: FloatingActionButton(
-                onPressed: () {},
-                backgroundColor: AppColors.primary,
-                child: const Icon(
-                  Icons.shopping_cart_outlined,
-                  color: AppColors.white,
-                ),
+          floatingActionButton: SizedBox(
+            width: ResponsiveLayout.getWidth(45, context),
+            height: ResponsiveLayout.getHeight(45, context),
+            child: FloatingActionButton(
+              onPressed: () {},
+              backgroundColor: AppColors.primary,
+              child: const Icon(
+                Icons.shopping_cart_outlined,
+                color: AppColors.white,
               ),
             ),
-            appBar: AppBar(
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  user?.name != null
-                      ? Text('${user?.name}', style: getTitleStyle(context))
-                      : SizedBox(
-                          height: ResponsiveLayout.getHeight(20, context),
-                          child: Shimmer.fromColors(
-                            baseColor: AppColors.grey,
-                            highlightColor: AppColors.white,
-                            child: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(
-                                      ResponsiveLayout.getHeight(20, context)),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                  Text("What are you reading today", style: getSmallStyle()),
-                ],
-              ),
-              actions: [
-                Container(
-                  margin: EdgeInsets.only(
-                      right: ResponsiveLayout.getWidth(5, context)),
-                  clipBehavior: Clip.antiAlias,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  width: ResponsiveLayout.getWidth(60, context),
-                  height: ResponsiveLayout.getHeight(60, context),
-                  child: Image.network(
-                    user?.image ?? '',
-                    errorBuilder: (context, error, stackTrace) {
-                      return SizedBox(
-                        width: 50,
-                        height: ResponsiveLayout.getHeight(150, context),
+          ),
+          appBar: AppBar(
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                user?.name != null
+                    ? Text('${user?.name}', style: getTitleStyle(context))
+                    : SizedBox(
+                        height: ResponsiveLayout.getHeight(20, context),
                         child: Shimmer.fromColors(
                           baseColor: AppColors.grey,
                           highlightColor: AppColors.white,
@@ -138,40 +82,72 @@ class _HomeViewState extends State<HomeView> {
                             ),
                           ),
                         ),
-                      );
-                    },
-                  ),
-                )
+                      ),
+                Text("What are you reading today", style: getSmallStyle()),
               ],
-              leading: customLedingDrawer(),
             ),
-            body: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Gap(
-                    ResponsiveLayout.getGap(10, context),
-                  ),
-                  CustomHaederSlider(
-                    imageSlider: sliders,
-                  ),
-                  Gap(
-                    ResponsiveLayout.getGap(10, context),
-                  ),
-                  CustomBestSellrey(
-                    products: productsModel,
-                  ),
-                  const CustomBtnSlider(),
-                  Gap(
-                    ResponsiveLayout.getGap(10, context),
-                  ),
-                  CustomCategorys(
-                    categorys: categoryModel,
-                  ),
-                  Gap(
-                    ResponsiveLayout.getGap(10, context),
-                  ),
-                ],
-              ),
+            actions: [
+              Container(
+                margin: EdgeInsets.only(
+                    right: ResponsiveLayout.getWidth(5, context)),
+                clipBehavior: Clip.antiAlias,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                ),
+                width: ResponsiveLayout.getWidth(60, context),
+                height: ResponsiveLayout.getHeight(60, context),
+                child: Image.network(
+                  user?.image ?? '',
+                  errorBuilder: (context, error, stackTrace) {
+                    return SizedBox(
+                      width: 50,
+                      height: ResponsiveLayout.getHeight(150, context),
+                      child: Shimmer.fromColors(
+                        baseColor: AppColors.grey,
+                        highlightColor: AppColors.white,
+                        child: Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(
+                                  ResponsiveLayout.getHeight(20, context)),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Gap(
+                  ResponsiveLayout.getGap(10, context),
+                ),
+                CustomHaederSlider(
+                  imageSlider: sliders,
+                ),
+                Gap(
+                  ResponsiveLayout.getGap(10, context),
+                ),
+                CustomBestSellrey(
+                  products: productsModel,
+                ),
+                const CustomBtnSlider(),
+                Gap(
+                  ResponsiveLayout.getGap(10, context),
+                ),
+                CustomCategorys(
+                  categorys: categoryModel,
+                ),
+                Gap(
+                  ResponsiveLayout.getGap(10, context),
+                ),
+              ],
             ),
           ),
         );
@@ -179,30 +155,4 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 //
-
-//
-
-  IconButton customLedingDrawer() {
-    return IconButton(
-      onPressed: _handleMenuButtonPressed,
-      icon: ValueListenableBuilder<AdvancedDrawerValue>(
-        valueListenable: _advancedDrawerController,
-        builder: (_, value, __) {
-          return AnimatedSwitcher(
-            duration: const Duration(milliseconds: 250),
-            child: Icon(
-              value.visible ? Icons.clear : Icons.menu,
-              key: ValueKey<bool>(value.visible),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  void _handleMenuButtonPressed() {
-    // NOTICE: Manage Advanced Drawer state through the Controller.
-    // _advancedDrawerController.value = AdvancedDrawerValue.visible();
-    _advancedDrawerController.showDrawer();
-  }
 }
