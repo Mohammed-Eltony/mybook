@@ -9,6 +9,7 @@ import 'package:mybook/core/services/dio_helper.dart';
 import 'package:mybook/core/services/end_points.dart';
 import 'package:mybook/core/services/local_storage.dart';
 import 'package:mybook/features/auth/presentation/manager/auth_state.dart';
+import 'package:mybook/features/favarite/presentation/manager/favarite_model/favarite_model.dart';
 import 'package:mybook/features/home/presentation/manager/category_model/category_model.dart';
 import 'package:mybook/features/home/presentation/manager/product/product_model.dart';
 import 'package:mybook/features/profile/presentation/manager/user_model.dart';
@@ -139,7 +140,7 @@ class AuthCubit extends Cubit<AuthState> {
     });
   }
 
-  List<ProductModel> products = [];
+  Set<ProductModel> products = {};
   // get best sellrey
   getBestSellery() {
     emit(BastSellerLoading());
@@ -181,14 +182,18 @@ class AuthCubit extends Cubit<AuthState> {
 
   //get Show Category
 
-  List<ProductModel> showCategories = [];
+  Set<ProductModel> showCategories = {};
   getShowCategories({required String id}) {
     emit(ShowCategoryLoading());
     DioHelper.getData(url: '${EndPoints.showCategory}$id').then((value) {
+      if (showCategories.isNotEmpty) {
+        showCategories.clear();
+      }
+
       value.data['data']['products'].forEach((element) {
         showCategories.add(ProductModel.fromJson(element));
       });
-      log(showCategories.toString());
+
       emit(ShowCategorySuccess());
     }).catchError((error) {
       log(error.response.data.toString());
@@ -321,7 +326,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   // search prduct
 
-  List<ProductModel> searchProduct = [];
+  Set<ProductModel> searchProduct = {};
 
   TextEditingController textSearchControl = TextEditingController();
 
@@ -338,6 +343,62 @@ class AuthCubit extends Cubit<AuthState> {
       emit(SearchSuccess());
     }).catchError((error) {
       emit(SearchError(error.toString()));
+    });
+  }
+
+  // show Favorite
+
+  Set<FavariteModel> favoriteProduct = {};
+  showFavorite() {
+    emit(ShowFavoriteLoading());
+    DioHelper.getData(
+      url: EndPoints.showFavorite,
+      token: AppLocalStorage.getCacheData('token'),
+    ).then((value) {
+      for (var element in value.data['data']['data']) {
+        favoriteProduct.add(FavariteModel.fromJson(element));
+      }
+
+      emit(ShowFavoriteSuccess());
+    }).catchError((error) {
+      emit(ShowFavoriteError(error.toString()));
+    });
+  }
+
+  // add Favorite
+
+  addFavorite(int id) {
+    emit(AddFavoriteLoading());
+    DioHelper.postData(
+      url: EndPoints.addFavorite,
+      token: AppLocalStorage.getCacheData('token'),
+      data: {
+        'product_id': id,
+      },
+    ).then((value) {
+      showFavorite();
+      emit(AddFavoriteSuccess());
+    }).catchError((error) {
+      emit(AddFavoriteError(error.toString()));
+    });
+  }
+
+  // remove Favorite
+
+  removeFavorite(int id) {
+    emit(RemoveFavoriteLoading());
+    DioHelper.postData(
+      url: EndPoints.removeFavorite,
+      token: AppLocalStorage.getCacheData('token'),
+      data: {
+        'product_id': id,
+      },
+    ).then((value) {
+      favoriteProduct.removeWhere((element) => element.id == id);
+      showFavorite();
+      emit(RemoveFavoriteSuccess());
+    }).catchError((error) {
+      emit(RemoveFavoriteError(error.toString()));
     });
   }
 }

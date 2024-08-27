@@ -122,3 +122,36 @@ class ShowCategoryError extends AuthState {
 
   ShowCategoryError(this.error);
 }
+
+// show Favorite state
+class ShowFavoriteLoading extends AuthState {}
+
+class ShowFavoriteSuccess extends AuthState {}
+
+class ShowFavoriteError extends AuthState {
+  String error;
+
+  ShowFavoriteError(this.error);
+}
+
+// add Favorite state
+class AddFavoriteLoading extends AuthState {}
+
+class AddFavoriteSuccess extends AuthState {}
+
+class AddFavoriteError extends AuthState {
+  String error;
+
+  AddFavoriteError(this.error);
+}
+
+// remove Favorite state
+class RemoveFavoriteLoading extends AuthState {}
+
+class RemoveFavoriteSuccess extends AuthState {}
+
+class RemoveFavoriteError extends AuthState {
+  String error;
+
+  RemoveFavoriteError(this.error);
+}

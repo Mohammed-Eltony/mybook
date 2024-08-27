@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:mybook/core/functions/navigator.dart';
 import 'package:mybook/core/responsive/responsive_layout.dart';
 import 'package:mybook/core/utils/colors.dart';
 import 'package:mybook/core/utils/text_style.dart';
 import 'package:mybook/features/auth/presentation/manager/auth_cubit.dart';
 import 'package:mybook/features/auth/presentation/manager/auth_state.dart';
+import 'package:mybook/features/cart/presentation/view/cart_view.dart';
 import 'package:mybook/features/home/presentation/manager/category_model/category_model.dart';
 import 'package:mybook/features/home/presentation/manager/product/product_model.dart';
 import 'package:mybook/features/home/presentation/widget/CustomBestSelling.dart';
@@ -35,7 +37,9 @@ class _HomeViewState extends State<HomeView> {
     BlocProvider.of<AuthCubit>(context).getHomeHeadersSlider();
     BlocProvider.of<AuthCubit>(context).getBestSellery();
     BlocProvider.of<AuthCubit>(context).getCategories();
+    BlocProvider.of<AuthCubit>(context).getShowCategories(id: '2');
     BlocProvider.of<AuthCubit>(context).getProfile();
+    BlocProvider.of<AuthCubit>(context).showFavorite();
   }
 
   @override
@@ -43,7 +47,8 @@ class _HomeViewState extends State<HomeView> {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         List sliders = AuthCubit.get(context).sliders;
-        List<ProductModel> productsModel = AuthCubit.get(context).products;
+        List<ProductModel> productsModel =
+            AuthCubit.get(context).products.toList();
         List<CategoryModel> categoryModel = AuthCubit.get(context).categories;
         UserModel? user = AuthCubit.get(context).userModel;
         return Scaffold(
@@ -52,7 +57,9 @@ class _HomeViewState extends State<HomeView> {
             width: ResponsiveLayout.getWidth(45, context),
             height: ResponsiveLayout.getHeight(45, context),
             child: FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+                navTo(context, const CartView());
+              },
               backgroundColor: AppColors.primary,
               child: const Icon(
                 Icons.shopping_cart_outlined,
@@ -154,5 +161,6 @@ class _HomeViewState extends State<HomeView> {
       },
     );
   }
+
 //
 }

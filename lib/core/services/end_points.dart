@@ -11,4 +11,7 @@ class EndPoints {
   static const String update_profile = 'update-profile';
   static const String search = 'products-search?name=';
   static const String showCategory = '/categories/';
+  static const String showFavorite = '/wishlist';
+  static const String addFavorite = '/add-to-wishlist';
+  static const String removeFavorite = '/remove-from-wishlist';
 }

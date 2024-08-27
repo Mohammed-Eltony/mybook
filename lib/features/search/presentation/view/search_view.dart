@@ -25,7 +25,7 @@ class _SearchViewState extends State<SearchView> {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         var cubit = AuthCubit.get(context);
-        List<ProductModel> products = cubit.searchProduct;
+        List<ProductModel> products = cubit.searchProduct.toList();
         return Scaffold(
           appBar: AppBar(
             title: const Text(
