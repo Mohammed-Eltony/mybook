@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mybook/core/responsive/responsive_layout.dart';
 import 'package:mybook/core/utils/colors.dart';
 import 'package:mybook/core/utils/text_style.dart';
@@ -76,7 +77,9 @@ class _SearchViewState extends State<SearchView> {
                               return null;
                             },
                             itemCount: cubit.searchProduct.length)
-                        : const Center(child: Text('No Result Found'))),
+                        : Center(
+                            child: Lottie.asset('assets/not_found.json'),
+                          )),
               ],
             ),
           ),

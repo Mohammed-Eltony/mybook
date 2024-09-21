@@ -155,3 +155,38 @@ class RemoveFavoriteError extends AuthState {
 
   RemoveFavoriteError(this.error);
 }
+
+// add cart state
+
+class AddCartLoading extends AuthState {}
+
+class AddCartSuccess extends AuthState {}
+
+class AddCartError extends AuthState {
+  String error;
+
+  AddCartError(this.error);
+}
+// logout state
+
+class LogoutLoading extends AuthState {}
+
+class LogoutSuccess extends AuthState {}
+
+class LogoutError extends AuthState {
+  String error;
+
+  LogoutError(this.error);
+}
+
+// delete account state
+
+class DeleteAccountLoading extends AuthState {}
+
+class DeleteAccountSuccess extends AuthState {}
+
+class DeleteAccountError extends AuthState {
+  String error;
+
+  DeleteAccountError(this.error);
+}

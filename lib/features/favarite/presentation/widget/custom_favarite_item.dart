@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:mybook/core/functions/custom_SnackBar.dart';
 import 'package:mybook/core/functions/navigator.dart';
 import 'package:mybook/core/responsive/responsive_layout.dart';
 import 'package:mybook/core/utils/colors.dart';
 import 'package:mybook/core/utils/text_style.dart';
 import 'package:mybook/core/widgets/show_product.dart';
 import 'package:mybook/features/auth/presentation/manager/auth_cubit.dart';
+import 'package:mybook/features/auth/presentation/manager/auth_state.dart';
 import 'package:mybook/features/favarite/presentation/manager/favarite_model/favarite_model.dart';
 import 'package:mybook/features/home/presentation/manager/product/product_model.dart';
 import 'package:shimmer/shimmer.dart';
@@ -120,7 +123,11 @@ class _customFavariteItemState extends State<customFavariteItem> {
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  cubit.addToCart(product_id: widget.productModel.id!);
+                  showErrorDialog(context, 'Added to cart',
+                      color: Colors.green);
+                },
                 icon: const Icon(
                   Icons.shopping_cart_outlined,
                   color: AppColors.green,

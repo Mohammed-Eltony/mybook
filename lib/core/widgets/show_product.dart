@@ -1,12 +1,15 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:mybook/core/functions/custom_SnackBar.dart';
 import 'package:mybook/core/responsive/responsive_layout.dart';
 import 'package:mybook/core/utils/colors.dart';
 import 'package:mybook/core/utils/text_style.dart';
 import 'package:mybook/core/widgets/custom_btn.dart';
 import 'package:mybook/features/auth/presentation/manager/auth_cubit.dart';
+import 'package:mybook/features/auth/presentation/manager/auth_state.dart';
 import 'package:mybook/features/home/presentation/manager/product/product_model.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -68,10 +71,21 @@ class _ShowProductState extends State<ShowProduct> {
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: CustomBtn(
-          text: 'Add To Cart',
-          onPressed: () {},
-          width: ResponsiveLayout.getWidth(300, context),
+        floatingActionButton: BlocListener<AuthCubit, AuthState>(
+          listener: (context, state) {
+            if (state is AddCartSuccess) {
+              showErrorDialog(context, 'Success', color: Colors.green);
+            } else if (state is AddCartError) {
+              showErrorDialog(context, state.error);
+            }
+          },
+          child: CustomBtn(
+            text: 'Add To Cart',
+            onPressed: () {
+              cubit.addToCart(product_id: widget.product.id!);
+            },
+            width: ResponsiveLayout.getWidth(300, context),
+          ),
         ),
         body: SingleChildScrollView(
           child: Padding(

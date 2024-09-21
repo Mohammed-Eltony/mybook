@@ -27,7 +27,7 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   GlobalKey<FormState> globalKey = GlobalKey<FormState>();
-  bool obscureText = false;
+  bool obscureText = true;
 
   @override
   @override

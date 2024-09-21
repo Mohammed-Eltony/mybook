@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:mybook/core/functions/custom_SnackBar.dart';
 import 'package:mybook/core/functions/navigator.dart';
 import 'package:mybook/core/responsive/responsive_layout.dart';
 import 'package:mybook/core/utils/colors.dart';
@@ -131,7 +132,11 @@ class CustomItemOrder extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    cubit.addToCart(product_id: productModel.id!);
+                    showErrorDialog(context, 'Added to cart',
+                        color: Colors.green);
+                  },
                   icon: const Icon(
                     Icons.shopping_cart_outlined,
                     color: AppColors.green,

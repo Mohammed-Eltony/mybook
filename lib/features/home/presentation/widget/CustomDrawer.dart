@@ -11,7 +11,10 @@ import 'package:mybook/core/utils/text_style.dart';
 import 'package:mybook/features/auth/presentation/manager/auth_cubit.dart';
 import 'package:mybook/features/auth/presentation/manager/auth_state.dart';
 import 'package:mybook/features/auth/presentation/view/login_view.dart';
+import 'package:mybook/features/order_histoey/presentation/view/order_histoey_view.dart';
 import 'package:mybook/features/profile/presentation/manager/user_model.dart';
+import 'package:mybook/features/update-password%20copy/presentation/view/update-password.dart';
+import 'package:mybook/main.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({
@@ -26,6 +29,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     UserModel? user = AuthCubit.get(context).userModel;
+    var cubit = AuthCubit.get(context);
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         if (state is EditProfileSuccess) {
@@ -75,7 +79,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       ),
                     ),
                     child: ListTile(
-                      onTap: () {},
+                      onTap: () {
+                        navTo(context, const OrderHistoeyView());
+                      },
                       trailing: const Icon(Icons.arrow_forward_ios),
                       leading: const Icon(Icons.history_edu),
                       title: const Text('Order History'),
@@ -93,7 +99,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       ),
                     ),
                     child: ListTile(
-                      onTap: () {},
+                      onTap: () {
+                        navTo(context, const UpdatePassword());
+                      },
                       leading: const Icon(Icons.lock),
                       trailing: const Icon(Icons.arrow_forward_ios),
                       title: const Text('Change Password'),
@@ -111,7 +119,51 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       ),
                     ),
                     child: ListTile(
-                      onTap: () {},
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text(
+                                'Delete Account',
+                                style: getTitleStyle(
+                                  context,
+                                ),
+                              ),
+                              content: TextFormField(
+                                controller: AuthCubit().passwordController,
+                                decoration: InputDecoration(
+                                    label: Text(
+                                  'Enter your password',
+                                  style:
+                                      getSmallStyle(color: AppColors.primary),
+                                )),
+                              ),
+                              actions: [
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                      foregroundColor: AppColors.red),
+                                  child: const Text("Delete Account"),
+                                  onPressed: () {
+                                    cubit.deleteAccount(
+                                        password:
+                                            AuthCubit().passwordController.text,
+                                        conext: context);
+                                  },
+                                ),
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                      foregroundColor: AppColors.green),
+                                  child: const Text("Close"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                       leading: const Icon(Icons.delete),
                       trailing: const Icon(Icons.arrow_forward_ios),
                       title: const Text('Delete Account'),
@@ -129,9 +181,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       ),
                     ),
                     child: ListTile(
-                      onTap: () {
-                        AppLocalStorage.removeData('token');
-                        navToRemoveUntil(context, const LoginView());
+                      onTap: () async {
+                        await cubit.LogOut(context);
+                        runApp(const MyApp());
                       },
                       leading: const Icon(Icons.logout),
                       trailing: const Icon(Icons.arrow_forward_ios),

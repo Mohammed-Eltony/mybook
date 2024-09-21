@@ -5,10 +5,12 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mybook/core/functions/navigator.dart';
 import 'package:mybook/core/services/dio_helper.dart';
 import 'package:mybook/core/services/end_points.dart';
 import 'package:mybook/core/services/local_storage.dart';
 import 'package:mybook/features/auth/presentation/manager/auth_state.dart';
+import 'package:mybook/features/auth/presentation/view/login_view.dart';
 import 'package:mybook/features/favarite/presentation/manager/favarite_model/favarite_model.dart';
 import 'package:mybook/features/home/presentation/manager/category_model/category_model.dart';
 import 'package:mybook/features/home/presentation/manager/product/product_model.dart';
@@ -399,6 +401,53 @@ class AuthCubit extends Cubit<AuthState> {
       emit(RemoveFavoriteSuccess());
     }).catchError((error) {
       emit(RemoveFavoriteError(error.toString()));
+    });
+  }
+
+// add cart
+  void addToCart({required int product_id}) {
+    emit(AddCartLoading());
+    DioHelper.postData(
+      url: EndPoints.addToCart,
+      data: {'product_id': product_id},
+      token: AppLocalStorage.getCacheData('token'),
+    ).then((value) {
+      emit(AddCartSuccess());
+    }).catchError((error) {
+      emit(AddCartError(error.toString()));
+    });
+  }
+
+  TextEditingController passwordController = TextEditingController();
+  deleteAccount({required String password, required BuildContext conext}) {
+    emit(DeleteAccountLoading());
+    log('Delete Account');
+    DioHelper.postData(
+      url: EndPoints.deleteProfile,
+      token: AppLocalStorage.getCacheData('token'),
+      data: {'current_password': passwordController.text},
+    ).then((value) {
+      AppLocalStorage.removeData('token');
+      navToRemoveUntil(conext, const LoginView());
+      emit(DeleteAccountSuccess());
+    }).catchError((error) {
+      emit(DeleteAccountError(error.toString()));
+    });
+  }
+
+  LogOut(context) {
+    emit(LogoutLoading());
+    log('Logout');
+    DioHelper.postData(
+      url: EndPoints.logout,
+      token: AppLocalStorage.getCacheData('token'),
+      data: {},
+    ).then((value) {
+      AppLocalStorage.removeData('token');
+      navToRemoveUntil(context, const LoginView());
+      emit(LogoutSuccess());
+    }).catchError((error) {
+      emit(LogoutError(error.toString()));
     });
   }
 }

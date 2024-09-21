@@ -14,4 +14,15 @@ class EndPoints {
   static const String showFavorite = '/wishlist';
   static const String addFavorite = '/add-to-wishlist';
   static const String removeFavorite = '/remove-from-wishlist';
+  static const String addToCart = '/add-to-cart';
+  static const String cart = '/cart';
+  static const String removeCart = '/remove-from-cart';
+  static const String updateCart = '/update-cart';
+  static const String checkout = '/checkout';
+  static const String placeOrder = '/place-order';
+  static const String orderHistory = '/order-history';
+  static const String showOrderHistory = '/order-history/';
+  static const String updatePassword = '/update-password';
+  static const String logout = '/logout';
+  static const String deleteProfile = '/delete-profile';
 }
